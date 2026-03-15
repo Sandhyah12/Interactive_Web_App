@@ -24,6 +24,8 @@ CycleCare is a web application that helps users track their menstrual cycle and 
 
 - Home Page – Introduction and overview of the application.
 
+- Login Page - Users can login/signup the cyclecare using their email address
+
 - Tracker Page – Users can input cycle information and generate predictions.
 
 - History / Calendar Page – Displays the generated cycle calendar.
@@ -33,7 +35,8 @@ CycleCare is a web application that helps users track their menstrual cycle and 
 ##Project Structure
 CycleCare/
 │
-├── index.html
+├── home.html
+├── login.html
 ├── tracker.html
 ├── history.html
 ├── contact.html
@@ -51,6 +54,7 @@ CycleCare/
 ## How to Use
 - Open the Home Page of the application.
 - Navigate using the navigation bar.
+- Go to Login page and login using your Email address and password
 - Go to the Tracker Page and enter:
    - Period start date
    - Cycle length
