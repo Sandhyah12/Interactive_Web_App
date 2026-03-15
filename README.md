@@ -36,7 +36,7 @@ CycleCare is a web application that helps users track their menstrual cycle and 
 CycleCare/
 │
 ├── home.html
-├── login.html
+├── login.html  & signup.html
 ├── tracker.html
 ├── history.html
 ├── contact.html
