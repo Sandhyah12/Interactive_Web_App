@@ -1,4 +1,11 @@
-<!-- tracker.html -->
+<?php
+/**
+ * Cycle Tracker Page
+ * ICT 2204 / COM 2303 - Phase 3
+ */
+
+require_once 'includes/auth_check.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,13 +15,13 @@
     <link rel="icon" href="https://image.winudf.com/v2/image1/Y29tLm1uLm92dWxhdGlvbnRyYWNrZXIucGVyaW9kY2FsZW5kYXIucGVyaW9kdHJhY2tlcl9pY29uXzE2OTQ0ODE1NTNfMDM4/icon.png?w=102&fakeurl=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- Navbar -->
-   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <img src="https://image.winudf.com/v2/image1/Y29tLm1uLm92dWxhdGlvbnRyYWNrZXIucGVyaW9kY2FsZW5kYXIucGVyaW9kdHJhY2tlcl9pY29uXzE2OTQ0ODE1NTNfMDM4/icon.png?w=102&fakeurl=1" alt="Logo">
                 CycleCare
             </a>
@@ -28,11 +35,12 @@
                 </div>
                 <div class="offcanvas-body">
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link active" href="index.html">Home</a>
-                         <a class="nav-link" href="login.html">Login</a>
-                        <a class="nav-link" href="tracker.html">Tracker</a>
-                        <a class="nav-link" href="history.html">History</a>
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="index.php">Home</a>
+                        <a class="nav-link" href="dashboard.php">Dashboard</a>
+                        <a class="nav-link active" href="tracker.php">Tracker</a>
+                        <a class="nav-link" href="history.php">History</a>
+                        <a class="nav-link" href="contact.php">Contact</a>
+                        <a class="nav-link" href="auth/logout.php">Logout</a>
                     </div>
                 </div>
             </div>
@@ -49,7 +57,7 @@
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                             <div>
                                 <h3 class="fw-bold text-pink mb-1">Your Cycle Calendar</h3>
-                                <p class="text-muted mb-0" id="currentDateDisplay">March 19, 2026</p>
+                                <p class="text-muted mb-0" id="currentDateDisplay">Loading...</p>
                             </div>
                             <div class="legend d-flex gap-3 flex-wrap">
                                 <span class="badge rounded-pill bg-pink">Period</span>
@@ -87,7 +95,7 @@
                                 </select>
                             </div>
                             <div class="col-md-2 d-flex align-items-end">
-                                <button class="btn btn-pink w-100 rounded-pill" onclick="generateCalendar()">
+                                <button class="btn btn-pink w-100 rounded-pill" onclick="generateCalendar()" title="Update Calendar">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </div>
@@ -98,7 +106,7 @@
                             <button class="btn btn-outline-pink rounded-circle" onclick="changeMonth(-1)">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
-                            <h4 class="mb-0 fw-bold text-pink" id="monthDisplay">March 2026</h4>
+                            <h4 class="mb-0 fw-bold text-pink" id="monthDisplay">Loading...</h4>
                             <button class="btn btn-outline-pink rounded-circle" onclick="changeMonth(1)">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
@@ -107,7 +115,8 @@
                         <!-- Calendar Grid -->
                         <div class="calendar-wrapper">
                             <div class="calendar-weekdays">
-                                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div>
+                                <div>Sun</div><div>Mon</div><div>Tue</div>
+                                                                <div>Wed</div>
                                 <div>Thu</div><div>Fri</div><div>Sat</div>
                             </div>
                             <div id="calendarGrid" class="calendar-grid">
@@ -122,12 +131,12 @@
             <div class="col-lg-5">
                 <div class="card shadow-lg border-0 rounded-4 h-100">
                     <div class="card-body p-4">
-                        <h4 class="fw-bold text-pink mb-3" id="selectedDateDisplay">Thursday, March 19, 2026</h4>
+                        <h4 class="fw-bold text-pink mb-3" id="selectedDateDisplay">Select a date</h4>
                         
                         <!-- Fertility Status -->
                         <div class="alert alert-light border-0 rounded-4 mb-4" id="fertilityStatus">
-                            <span class="badge bg-secondary mb-2">Low fertility window</span>
-                            <p class="mb-0 text-muted small">Lower chance of pregnancy</p>
+                            <span class="badge bg-secondary mb-2">Select a date</span>
+                            <p class="mb-0 text-muted small">Click on a calendar date to see fertility status</p>
                         </div>
 
                         <!-- Symptoms -->
@@ -187,7 +196,7 @@
                         </div>
 
                         <!-- Save Button -->
-                        <button class="btn btn-pink w-100 rounded-pill py-3 fw-bold mb-4" onclick="saveLog()">
+                        <button class="btn btn-pink w-100 rounded-pill py-3 fw-bold mb-4" onclick="saveLogToBackend()" id="saveLogBtn">
                             <i class="fas fa-save me-2"></i>Save Log
                         </button>
 
@@ -215,19 +224,138 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/script.js"></script>
+    
     <script>
-  // Get current page filename
-  const currentPage = window.location.pathname.split("/").pop();
-  // Get all nav links
-  const navLinks = document.querySelectorAll(".navbar .nav-link");
-  navLinks.forEach(link => {
-    // Remove any existing 'active' class
-    link.classList.remove("active");
-    if(link.getAttribute("href") === currentPage) {
-      link.classList.add("active");
+    // Override saveLog to use backend
+    async function saveLogToBackend() {
+        const height = document.getElementById('height')?.value || null;
+        const weight = document.getElementById('weight')?.value || null;
+        
+        const logData = {
+            log_date: selectedDate.toISOString().split('T')[0],
+            symptoms: activeSymptoms,
+            water_intake: waterIntake,
+            height: height,
+            weight: weight
+        };
+        
+        const saveBtn = document.getElementById('saveLogBtn');
+        const originalText = saveBtn.innerHTML;
+        
+        try {
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+            
+            const result = await api.saveLog(logData);
+            
+            // Also save to localStorage as backup
+            saveLog();
+            
+            // Show success alert
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-5';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = `
+                <i class="fas fa-check-circle me-2"></i>Log saved to database!
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => alertDiv.remove(), 3000);
+            
+            loadLogsFromBackend();
+            
+        } catch (error) {
+            console.warn('Backend save failed, using localStorage:', error);
+            saveLog();
+            
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-warning alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-5';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = `
+                <i class="fas fa-exclamation-triangle me-2"></i>Saved locally (offline mode)
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => alertDiv.remove(), 3000);
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalText;
+        }
     }
-  });
-</script>
+
+    // Load logs from backend
+    async function loadLogsFromBackend() {
+        try {
+            const result = await api.getLogs(5);
+            const logs = result.data;
+            
+            const container = document.getElementById('logsContainer');
+            if (!container) return;
+            
+            if (logs.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-clipboard-list fa-2x mb-2 opacity-25"></i>
+                        <p class="small mb-0">No logs yet. Start tracking today!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = logs.map(log => `
+                <div class="log-entry">
+                    <div>
+                        <div class="fw-bold text-pink">${new Date(log.log_date).toLocaleDateString()}</div>
+                        <div class="small text-muted">
+                            ${log.symptoms ? log.symptoms.join(', ') : 'No symptoms'} • 
+                            <i class="fas fa-droplet"></i> ${log.water_intake} cups
+                            ${log.weight_kg ? `• <i class="fas fa-weight-scale"></i> ${log.weight_kg}kg` : ''}
+                        </div>
+                    </div>
+                    <i class="fas fa-check-circle text-success"></i>
+                </div>
+            `).join('');
+            
+        } catch (error) {
+            console.warn('Failed to load from backend:', error);
+            loadLogs();
+        }
+    }
+
+    // Override generateCalendar to also save to backend
+    const originalGenerateCalendar = generateCalendar;
+    generateCalendar = async function() {
+        const startValue = document.getElementById('startDate').value;
+        const periodLength = parseInt(document.getElementById('periodLength').value);
+        const cycleLength = parseInt(document.getElementById('cycleLength').value);
+
+        if (!startValue) {
+            alert('Please select a start date');
+            return;
+        }
+
+        originalGenerateCalendar();
+        
+        try {
+            await api.saveCycle({
+                start_date: startValue,
+                period_length: periodLength,
+                cycle_length: cycleLength
+            });
+            console.log('Cycle saved to database');
+        } catch (error) {
+            console.warn('Failed to save cycle to backend:', error);
+        }
+    };
+
+    // Load logs from backend on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadLogsFromBackend();
+    });
+    </script>
 </body>
 </html>
