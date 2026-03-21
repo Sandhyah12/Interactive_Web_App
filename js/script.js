@@ -1,4 +1,7 @@
-
+/**
+ * CycleCare Frontend Logic
+ * ICT 2204 / COM 2303 - Phase 3
+ */
 
 // ==================== GLOBAL VARIABLES ====================
 let currentDate = new Date();
@@ -84,7 +87,7 @@ function renderCalendar() {
 
         // Check cycle phases for any future cycles
         let tempStart = new Date(startDate);
-        while (tempStart.getFullYear() < currentYear + 2) { // check 2 years ahead
+        while (tempStart.getFullYear() < currentYear + 2) {
             const tempPeriodEnd = new Date(tempStart);
             tempPeriodEnd.setDate(tempStart.getDate() + periodLength);
 
@@ -111,7 +114,6 @@ function renderCalendar() {
                 break;
             }
 
-            // Move to next cycle
             tempStart.setDate(tempStart.getDate() + cycleLength);
         }
 
@@ -262,7 +264,7 @@ function saveLog() {
         timestamp: new Date().toISOString()
     };
     
-    // Save to logs
+    // Save to localStorage
     let logs = JSON.parse(localStorage.getItem('cycleLogs') || '[]');
     logs.unshift(log);
     localStorage.setItem('cycleLogs', JSON.stringify(logs));
@@ -277,7 +279,6 @@ function saveLog() {
     
     loadLogs();
     
-    // Show success
     alert('Log saved successfully! 💗');
 }
 
@@ -336,13 +337,17 @@ function displayHistory() {
     const logs = JSON.parse(localStorage.getItem('cycleLogs') || '[]');
     
     // Update stats
-    document.getElementById('totalCycles').textContent = history.length;
+    const totalCyclesEl = document.getElementById('totalCycles');
+    const avgCycleEl = document.getElementById('avgCycle');
+    const avgPeriodEl = document.getElementById('avgPeriod');
+    
+    if (totalCyclesEl) totalCyclesEl.textContent = history.length;
     
     if (history.length > 0) {
         const avgCycle = Math.round(history.reduce((sum, h) => sum + h.cycleLength, 0) / history.length);
         const avgPeriod = Math.round(history.reduce((sum, h) => sum + h.periodLength, 0) / history.length);
-        document.getElementById('avgCycle').textContent = avgCycle;
-        document.getElementById('avgPeriod').textContent = avgPeriod;
+        if (avgCycleEl) avgCycleEl.textContent = avgCycle;
+        if (avgPeriodEl) avgPeriodEl.textContent = avgPeriod;
     }
     
     // Display list
@@ -354,7 +359,7 @@ function displayHistory() {
             <div class="text-center py-5 text-muted">
                 <i class="fas fa-calendar-times fa-3x mb-3 opacity-25"></i>
                 <p>No history available yet. Start tracking your cycle!</p>
-                <a href="tracker.html" class="btn btn-pink rounded-pill mt-3">Go to Tracker</a>
+                <a href="tracker.php" class="btn btn-pink rounded-pill mt-3">Go to Tracker</a>
             </div>
         `;
         return;
@@ -410,14 +415,4 @@ function clearHistory() {
         localStorage.removeItem('cycleLogs');
         displayHistory();
     }
-}
-
-// ==================== UTILITY FUNCTIONS ====================
-function formatDate(date) {
-    return new Date(date).toLocaleDateString('en-US', {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    });
 }
