@@ -52,6 +52,36 @@ CycleCare is a web-based period tracking application that helps users monitor th
 | Font Awesome | Input Validation | |
 
 ---
+## Project Structure
+- Interactive_Web_App/
+- │
+- ├── api/                 # Backend APIs for AJAX calls
+- │   └── ...              # API scripts
+- │
+- ├── auth/                # User authentication scripts
+- │   ├── login.php
+- │   ├── logout.php
+- │   └── signup.php
+- │
+- ├── css/                 # Stylesheets
+- │   └── style.css
+- │
+- ├── includes/            # Reusable PHP components
+- │   ├── db_connect.php   # Database connection
+- │   ├── header.php       # Site header
+- │   └── footer.php       # Site footer
+- │
+- ├── js/                  # JavaScript files
+- │   └── scripts.js
+- │
+- ├── index.php            # Landing page / home page
+- ├── tracker.php          # Period tracker page
+- ├── dashboard.php        # User dashboard
+- ├── history.php          # Cycle history page
+- ├── contact.php          # Contact form page
+- ├── database.sql         # Database schema and sample data
+- └── assets/              # Images, icons, and other static files
+---
 
 ## Security Features
 
@@ -81,8 +111,29 @@ CycleCare is a web-based period tracking application that helps users monitor th
 2. Click "Import" tab
 3. Click "Choose File" and select `database.sql` from this project
 4. Click "Go" button to import
+ ---
+## How to Run the Project
+1. Place the project in XAMPP
+2. Copy the Interactive_Web_App folder into htdocs inside your XAMPP installation directory.
+Windows: C:\xampp\htdocs\Interactive_Web_App
+Mac: /Applications/XAMPP/htdocs/Interactive_Web_App
+3. Start the local server
+4. Open XAMPP Control Panel
+5. Start Apache (and MySQL if using the database)
+6. Open the project in a browser
 
+7. Go to:
+
+- http://localhost/Interactive_Web_App/
+- You should see the CycleCare homepage.
+- Navigate to pages like Login, Dashboard, Tracker, etc.
+- Login / Signup
+- Use the signup form to create a new account
+- Login to start tracking cycles and viewing predictions
+
+---
 **Alternative: Create database manually**
 ```sql
 CREATE DATABASE cyclecare;
 -- Then import the SQL file
+
